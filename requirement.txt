@@ -6,6 +6,6 @@ typing_extensions==4.8.0
 
 # "run this command to get venv and template on your console"
 
-# pip install -r requirements.txt
+# pip install -r requirement.txt
 
 
