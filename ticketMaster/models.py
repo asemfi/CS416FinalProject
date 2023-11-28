@@ -22,6 +22,9 @@ class Comments(models.Model):
     starRating = models.IntegerField()
     comment = models.CharField(max_length=2000)
 
+    def __str__(self):
+        return self.comment
+
 
 class SavedEvents(models.Model):
     eventID = models.ForeignKey(Event, on_delete=models.CASCADE)
