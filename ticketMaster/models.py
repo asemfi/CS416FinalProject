@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -20,3 +21,8 @@ class Comments(models.Model):
     username = models.CharField(max_length=200)
     starRating = models.IntegerField()
     comment = models.CharField(max_length=2000)
+
+
+class SavedEvents(models.Model):
+    eventID = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, )
