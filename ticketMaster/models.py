@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,8 +19,8 @@ class Event(models.Model):
 
 class Comments(models.Model):
     eventID = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-    starRating = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    starRating = models.IntegerField(default='-1', editable=False)
     comment = models.CharField(max_length=2000)
 
     def __str__(self):
@@ -28,4 +29,9 @@ class Comments(models.Model):
 
 class SavedEvents(models.Model):
     eventID = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+
+
+# makemigrations ticketMaster
+# migrate ticketMaster
