@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 
+# User is an object that correlates to rows of the auth_user table
+
 # Create your models here.
 
 
