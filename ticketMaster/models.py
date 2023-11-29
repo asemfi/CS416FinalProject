@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 
 class Event(models.Model):
-    eventID = models.CharField(max_length=20, unique=True)
+    eventID = models.CharField(max_length=20, primary_key=True, unique=True)
     eventName = models.CharField(max_length=200)
     localDateTime = models.DateTimeField()
     venue = models.CharField(max_length=200)
