@@ -1,0 +1,11 @@
+# CS416FinalProject
+asgiref==3.7.2
+Django==4.2.7
+sqlparse==0.4.4
+typing_extensions==4.8.0
+
+# "run this command to get venv and template on your console"
+
+# pip install -r requirement.txt
+
+
