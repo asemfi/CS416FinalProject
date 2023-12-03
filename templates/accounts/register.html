@@ -1,14 +1,29 @@
 {% extends 'accounts/base.html' %}
 
 {% block body %}
+    <div class="container content-align-center">
+        <div>
+            <div class="row">
+                <div class="col-6">
+                    <h1>Register</h1>
+                </div>
+            </div>
+        </div>
 
-    <h2>Register</h2>
+        <div>
+            <div class="row">
+                <div class="col-9">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <form action="" method="post">
-    {%  csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+
 
 
 
