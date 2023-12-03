@@ -1,11 +1,25 @@
 {% extends 'accounts/base.html' %}
 
 {% block body %}
-	<h1> Home Page</h1>
-    {% if user.is_authenticated %}
-        <h3>Welcome {{ user.username  }} !!</h3>
-        {% else %}
-        <p>Welcome Visitor</p>
-    {% endif %}
+    <div class="container">
+        <div>
+            <div class="row">
+                <div class="col-3">
+                    <h1> Home Page</h1>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-5">
+                    {% if user.is_authenticated %}
+                        <h3>Welcome {{ user.username }} !!</h3>
+                    {% else %}
+                        <p>Welcome Visitor</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
+    </div>
 {% endblock %}
