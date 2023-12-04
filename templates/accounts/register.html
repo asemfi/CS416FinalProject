@@ -1,5 +1,6 @@
 {% extends 'accounts/base.html' %}
-
+{% load crispy_forms_tags %}
+{% load static %}
 {% block body %}
     <div class="container content-align-center">
         <div>
@@ -15,8 +16,10 @@
                 <div class="col-9">
                     <form action="" method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit">Register</button>
+                        {{ form|crispy }}
+                         <button class="btn btn-outline-primary btn-lg" type="submit">
+                                <i class="fas fa-sign-in-alt"></i> Submit
+                            </button>
                     </form>
                 </div>
             </div>

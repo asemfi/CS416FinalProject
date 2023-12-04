@@ -1,25 +1,31 @@
 {% extends 'accounts/base.html' %}
-
+{% load static %}
+{% block title %}
+    Home Page
+{% endblock %}
 {% block body %}
-    <div class="container">
-        <div>
-            <div class="row">
-                <div class="col-3">
-                    <h1> Home Page</h1>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="row">
-                <div class="col-5">
-                    {% if user.is_authenticated %}
-                        <h3>Welcome {{ user.username }} !!</h3>
+
+    <section class="container p-5 shadow my-5 bg-body rounded">
+
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1> Home Page</h1>
+
+
+
+                {% if user.is_authenticated %}
+
+
+
+                    {% if user.first_name == '' %}
+                        <h3>Welcome {{ user.username  }}  !!</h3>
                     {% else %}
-                        <p>Welcome Visitor</p>
+                        <h3> {{ user.first_name  }} {{ user.last_name  }}</h3>
                     {% endif %}
-                </div>
+                {% endif %}
             </div>
         </div>
 
-    </div>
+
+    </section>
 {% endblock %}
