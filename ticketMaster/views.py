@@ -19,7 +19,14 @@ def ticketmaster(request):
         # Check if either search_term or city is empty
         if not search_term or not city:
             # Set up an error message using Django's message utility to inform the user
-            messages.info(request, 'Both keyword and city are required fields.')
+
+            # has city but no search_term
+            if city: messages.info(request, 'Search term cannot be empty. Please enter a search term.')
+            # has search_term but no city
+            elif search_term: messages.info(request, 'City cannot be empty. Please enter a city.')
+            # has neither
+            else: messages.info(request, 'Both keyword and city are required fields.')
+
             # redirect user to the index page
             return redirect('ticketmaster')
             # Add code to handle or display the error_message as needed.
