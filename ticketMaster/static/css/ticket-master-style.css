@@ -121,14 +121,10 @@
 body{
     background-color: #fafafa;
 }
-
 #top-div{
      background-color: var(--bs-primary);
      color: #fafafa;
 }
-
-
-
 #search-term-msg{
     display: none;
 }
@@ -136,7 +132,6 @@ body{
     display: none;
 }
 #event-url{
-
     color: #fafafa;
     text-decoration: none;
     :hover{
@@ -147,14 +142,12 @@ body{
 #results{
     background-color: #f4f4f4;
 }
-
 #search-result{
     background-color: #fafafa;
     text-shadow: #fafafa;
     border: solid #fafafa;
     text-decoration: underline;
 }
-
 #footer-div {
     background: rgb(3, 174, 216);
     background: radial-gradient(circle, rgba(3, 174, 216, 1) 70%, rgba(3, 179, 225, 1) 79%, rgba(3, 176, 220, 1) 83%, rgba(2, 181, 229, 1) 87%, rgba(111, 194, 231, 0.4162790697674419) 92%, rgba(1, 187, 239, 1) 92%, rgba(29, 189, 237, 1) 93%, rgba(1, 185, 235, 1) 93%, rgba(5, 156, 185, 1) 100%, rgba(0, 212, 255, 1) 100%);
