@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from .models import Event, Comment, SavedEvent
 
 
 def ticketmaster(request):
@@ -63,7 +64,7 @@ def ticketmaster(request):
                     event_img_url = item['images'][1]['url']
                     # make sure image stored is large to ensure quality
                     for image in item['images']:
-                        if image['url'].lower().find("large") != -1 :
+                        if image['url'].lower().find("large") != -1:
                             event_img_url = image['url']
 
                     # Adding error handling for potential missing keys
@@ -112,6 +113,24 @@ def ticketmaster(request):
                         'event_city_state': event_city_state
 
                     }
+
+                    # check if event is in event table
+                    #   if not, add it
+                    if not Event.objects.filter(event_id=event_id).exists():
+                        data = {
+                            'event_id': event_id,
+                            'eventName': event_name,
+                            'eventLink': event_link,
+                            'imageLink': event_img_url,
+                            'venue': event_venue_name,
+                            'localDate': formatted_date,
+                            'localTime': formatted_time,
+                            'address': event_address,
+                            'cityState': event_city_state
+                        }
+                        # Create a new row using the create method
+                        Event.objects.create(**data)
+
                     event_list.append(event_details)
 
                 print('printing event_list')
