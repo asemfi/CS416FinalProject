@@ -117,9 +117,13 @@ def ticketmaster(request):
                     # check if event is in event table
                     #   if not, add it
                     if not Event.objects.filter(event_id=event_id).exists():
+                        event_details['localDate'] = date_object
+                        event_details['localTime'] = date_object
                         # Create a new row using the create method
                         Event.objects.create(**event_details)
 
+                    event_details['localDate'] = formatted_date
+                    event_details['localTime'] = formatted_time
                     event_list.append(event_details)
 
                 print('printing event_list')
@@ -144,6 +148,12 @@ def ticketmaster(request):
     # all other cases, just render the page without sending/passing any context to the template
     print('return without post or get')
     return render(request, 'ticketmaster.html')
+
+
+def view_event(request):
+    # Get the event based on its id
+    # event = Event.objects.get(id=event_id)
+    return render(request, 'eventview.html')
 
 
 def get_event_search(search_term, city_name, ):
