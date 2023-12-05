@@ -1,4 +1,5 @@
 # Create your views here.
+import urllib
 from _datetime import datetime
 import requests
 from django.contrib import messages
@@ -86,6 +87,15 @@ def ticketmaster(request):
                     event_state = item['_embedded']['venues'][0]['state']['name']
                     event_city = item['_embedded']['venues'][0]['city']['name']
                     event_city_state = event_city + ' , ' + event_state
+                    # Concatenate the address, city, and state to form the query parameter for Google Maps
+                    address_for_google_maps = f"{event_address}, {event_city_state}"
+
+                    # Encode the address to be URL-safe
+                    encoded_address = urllib.parse.quote(address_for_google_maps)
+
+                    google_map = "https://www.google.com/maps/search/?api=1&query=" + encoded_address
+                    print(google_map)
+
                     # Create a new dictionary to store event details
                     event_details = {
                         'event_name': event_name,
@@ -95,7 +105,8 @@ def ticketmaster(request):
                         'event_time': formatted_time,
                         'event_date': formatted_date,
                         'event_address': event_address,
-                        'event_city_state': event_city_state
+                        'event_city_state': event_city_state,
+                        'google_map': google_map
 
                     }
                     event_list.append(event_details)
@@ -111,13 +122,6 @@ def ticketmaster(request):
                 messages.info(request, 'NO RESULT FOUND.')
                 # redirect user to the index page
                 return redirect('ticketmaster')
-
-
-
-
-
-
-
 
     # all other cases, just render the page without sending/passing any context to the template
     print('return without post or get')
