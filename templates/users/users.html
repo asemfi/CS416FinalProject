@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+    <title>Users List</title>
+{% endblock %}
+
+{% block body %}
+	<h1>Users Here!!</h1>
+
+    <ul>
+
+{#    {% for user in users %}#}
+{#    	<li>#}
+{#        {{ user }}, <a href="{% url 'update' product.id %}">, Update</a>#}
+{#        </li>#}
+{#        #}
+{#    {% endfor %}#}
 
 
-<h1>Users Here!!</h1>
-</body>
-</html>
+    </ul>
+
+{% endblock %}
+

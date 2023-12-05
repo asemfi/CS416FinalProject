@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ticketmaster/', include('ticketMaster.urls')),
     path('accounts/', include('accounts.urls')),
+    #path('users/', include('users.urls'))
 
 ]
