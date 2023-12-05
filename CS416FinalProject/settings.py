@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ticketMaster.apps.TicketmasterConfig',
     'accounts',
-    'users',
     'crispy_forms',
     'crispy_bootstrap5'
 

@@ -16,7 +16,7 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     # for CRUD users
-    path('users/', include('users.urls')),
+    # path('users/', include('users.urls')),
 
 
 ]

@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+    <title>Users Form</title>
+{% endblock %}
+
+{% block body %}
+	<h1>Users Form!!</h1>
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+    </form>
+
+{% endblock %}
 
 
-<h1>Users Form!!</h1>
-</body>
-</html>

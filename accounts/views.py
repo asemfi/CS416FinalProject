@@ -3,8 +3,9 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView
-
+from django.contrib import messages
 from accounts.forms import SignUpForm
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -25,6 +26,10 @@ def register_view(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+def delete_user(request):
+    user = User.objects.get(user=request.user)
+    user.delete()
+    return redirect('index')
 
 def login_view(request):
     if request.method == 'POST':
@@ -42,6 +47,7 @@ def login_view(request):
 
 
 def logout_view(request):
+    messages.info(request, 'You are Logged out')
     logout(request)
     return redirect('index')
 
