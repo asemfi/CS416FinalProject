@@ -103,33 +103,22 @@ def ticketmaster(request):
                     # Create a new dictionary to store event details
                     event_details = {
                         'event_id': event_id,
-                        'event_name': event_name,
-                        'event_link': event_link,
-                        'event_img_url': event_img_url,
-                        'event_venue_name': event_venue_name,
-                        'event_time': formatted_time,
-                        'event_date': formatted_date,
-                        'event_address': event_address,
-                        'event_city_state': event_city_state
+                        'eventName': event_name,
+                        'eventLink': event_link,
+                        'imageLink': event_img_url,
+                        'venue': event_venue_name,
+                        'localDate': formatted_date,
+                        'localTime': formatted_time,
+                        'address': event_address,
+                        'cityState': event_city_state
 
                     }
 
                     # check if event is in event table
                     #   if not, add it
                     if not Event.objects.filter(event_id=event_id).exists():
-                        data = {
-                            'event_id': event_id,
-                            'eventName': event_name,
-                            'eventLink': event_link,
-                            'imageLink': event_img_url,
-                            'venue': event_venue_name,
-                            'localDate': formatted_date,
-                            'localTime': formatted_time,
-                            'address': event_address,
-                            'cityState': event_city_state
-                        }
                         # Create a new row using the create method
-                        Event.objects.create(**data)
+                        Event.objects.create(**event_details)
 
                     event_list.append(event_details)
 

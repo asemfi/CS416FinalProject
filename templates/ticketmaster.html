@@ -44,31 +44,31 @@
         <div class="card mb-3">
           <div class="row g-0 align-items-center">
             <div class="col-sm-4">
-              <img src="{{ event.event_img_url }}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
+              <img src="{{ event.imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
             </div>
             <div class="col-sm-8">
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-8">
                     <h3 class="card-title display-4" id="event-title">
-                      {{ event.event_name }}
+                      {{ event.eventName }}
                     </h3>
                   </div>
                   <div class="col-sm-4">
                     <small class="fs-4 text-success fw-bold" id="date">
-                                  {{ event.event_date }}
+                                  {{ event.localDate }}
                     </small><br>
                     <small class="fw-light fs-6 text-success" id="time">
-                      {{ event.event_time }}
+                      {{ event.localTime }}
                     </small>
                   </div>
 
-                  <p class="card-text text-muted display-6" id="venue-name"> {{ event.event_venue_name }}</p>
-                  <p class="card-text text-muted " id="address"> {{ event.event_address }}<br> {{ event.event_city_state }}</p>
+                  <p class="card-text text-muted display-6" id="venue-name"> {{ event.venue }}</p>
+                  <p class="card-text text-muted " id="address"> {{ event.address }}<br> {{ event.cityState }}</p>
                   <div>
                     <div>
                       <div class="col-4-sm">
-                        <a class="btn btn-primary" href=" {{ event.event_link }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
+                        <a class="btn btn-primary" href=" {{ event.eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
                       </div>
                     </div>
                   </div>
