@@ -57,6 +57,7 @@ def ticketmaster(request):
                 # So, the template only needs to plug in the preprocessed information.
                 for item in events:
                     event = {}
+                    event_id = item['id']
                     event_name = item['name']
                     event_link = item['url']
                     event_img_url = item['images'][1]['url']
@@ -95,6 +96,7 @@ def ticketmaster(request):
                     event_city_state = event_city + ' , ' + event_state
                     # Create a new dictionary to store event details
                     event_details = {
+                        'event_id': event_id,
                         'event_name': event_name,
                         'event_link': event_link,
                         'event_img_url': event_img_url,
