@@ -61,6 +61,11 @@ def ticketmaster(request):
                     event_name = item['name']
                     event_link = item['url']
                     event_img_url = item['images'][1]['url']
+                    # make sure image stored is large to ensure quality
+                    for image in item['images']:
+                        if image['url'].lower().find("large") != -1 :
+                            event_img_url = image['url']
+
                     # Adding error handling for potential missing keys
                     if 'dates' in item and 'start' in item['dates'] and 'dateTime' in item['dates']['start']:
                         event_date = item['dates']['start']['dateTime']
