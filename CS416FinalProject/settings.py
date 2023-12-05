@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ticketMaster.apps.TicketmasterConfig',
     'accounts',
+    'users',
     'crispy_forms',
     'crispy_bootstrap5'
 
@@ -128,3 +129,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = ['ticketMaster/static']
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

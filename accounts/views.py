@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.generic import FormView
 
 from accounts.forms import SignUpForm
 
@@ -36,7 +37,6 @@ def login_view(request):
     else:
         form = AuthenticationForm()
 
-
     context = {'form': form}
     return render(request, 'accounts/login.html', context)
 
@@ -44,3 +44,29 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+
+class PasswordConteexMixin:
+    extra_context = None
+
+    def __init__(self):
+        self.title = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(self, **kwargs)
+        context.update({
+            'title': self.title,
+            **(self.extra_context or {})
+        })
+        return context
+
+
+class PasswordResetView(PasswordConteexMixin, FormView):
+    email_template_name = 'registration/password_reset_email.html'
+    extra_email_context = None
+    from_class = PasswordResetForm
+    from_email = ''
+    html_email_template_name = None
+    subject_template_name = 'registration/password_reset_subject.txt'
+
+
