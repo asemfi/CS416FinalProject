@@ -171,7 +171,7 @@ def view_event(request, event_id):
         'comments': comment_list,
         'commentExists': already_commented,
         'commentInfo': {
-            'userRating': -1,
+            'userRating': 0,
             'userComment': ''
         }
     }

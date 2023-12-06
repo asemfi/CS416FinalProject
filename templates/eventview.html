@@ -62,11 +62,11 @@
               {% csrf_token %}
               <!-- Star rating scale container -->
               <ul id="star-rating">
-                <li class="star" data-rating="1"><i class="bi bi-star"></i></li>
-                <li class="star" data-rating="2"><i class="bi bi-star"></i></li>
-                <li class="star" data-rating="3"><i class="bi bi-star"></i></li>
-                <li class="star" data-rating="4"><i class="bi bi-star"></i></li>
-                <li class="star" data-rating="5"><i class="bi bi-star"></i></li>
+                <li class="star" id="star1"><i class="bi bi-star"></i></li>
+                <li class="star" id="star2"><i class="bi bi-star"></i></li>
+                <li class="star" id="star3"><i class="bi bi-star"></i></li>
+                <li class="star" id="star4"><i class="bi bi-star"></i></li>
+                <li class="star" id="star5"><i class="bi bi-star"></i></li>
               </ul>
               <!-- Hidden input field to store the users rating -->
               <input type="hidden" name="rating" id="rating-input" value="">
@@ -80,7 +80,7 @@
             <!--    if yes, should have options to update or delete comment -->
             {% if commentExists %}
               <div class="ms-2 me-auto text-center">
-                You've already left a comment here
+                You've already left a comment here, {{ user }}
               </div>
             {% else %}
               <div class="ms-2 me-auto text-center">
@@ -121,35 +121,50 @@
 
 {% block script %}
   <script>
+    let userRating = {{ commentInfo.userRating|default:0|safe }};
+    let userComment = '{{ commentInfo.userComment|default:""|safe }}';
+
     $(function(){
       <!-- adds click function to return to search button -->
       $('#go-to-search').click(function () {
         window.location.href = `/ticketmaster`;
       });
 
-      <!-- add star functionality -->
-      const stars = $('.star');
-      const ratingInput = $('#rating-input');
-      stars.click(function() {
-        let index = $(this).index();
-        // Update the value of the hidden input field
-        ratingInput.val(index + 1);
+      <!-- only run if user is logged in -->
+      {% if user.is_authenticated %}
+        <!-- add star functionality -->
+        const stars = $('.star');
+        const ratingInput = $('#rating-input');
+        stars.click(function() {
+          let index = $(this).index();
+          // Update the value of the hidden input field
+          ratingInput.val(index + 1);
 
-        // Remove 'checked' class from all stars
-        stars.each(function(i, star) {
-          $(star).children('.bi').removeClass('bi-star-fill');
-          $(star).children('.bi').addClass('bi-star');
-          // Add 'bi-star-fill', remove 'bi-star' class to the clicked star and all stars before it
-          if (i <= index) {
-            $(star).children('.bi').addClass('bi-star-fill');
-            $(star).children('.bi').removeClass('bi-star');
-          }
+          // Remove 'checked' class from all stars
+          stars.each(function(i, star) {
+            $(star).children('.bi').removeClass('bi-star-fill');
+            $(star).children('.bi').addClass('bi-star');
+            // Add 'bi-star-fill', remove 'bi-star' class to the clicked star and all stars before it
+            if (i <= index) {
+              $(star).children('.bi').addClass('bi-star-fill');
+              $(star).children('.bi').removeClass('bi-star');
+            }
+          });
         });
-      });
 
-      <!-- if user has not commented yet -->
-        <!-- add a submit button -->
-      <!-- if user has a comment logged -->
+        {% if commentExists %}
+          <!-- if user has a comment logged -->
+            <!-- populate fields -->
+            $('#star' + userRating).trigger('click');
+            $('#comment-input').val(userComment);
+            <!-- add an update button -->
+            <!-- add a delete button -->
+        {% else %}
+          <!-- if user has not commented yet -->
+            <!-- add a submit button -->
+        {% endif %}
+      {% else %}
+      {% endif %}
     });
   </script>
 {% endblock %}
