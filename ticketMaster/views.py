@@ -150,10 +150,11 @@ def ticketmaster(request):
     return render(request, 'ticketmaster.html')
 
 
-def view_event(request):
+def view_event(request, event_id):
     # Get the event based on its id
     # event = Event.objects.get(id=event_id)
-    return render(request, 'eventview.html')
+    context = {'event_id': event_id}
+    return render(request, 'eventview.html', context)
 
 
 def get_event_search(search_term, city_name, ):

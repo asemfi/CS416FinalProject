@@ -41,7 +41,7 @@
   {% if events %}
     <section class="shadow p-5" id="results">
       {% for event in events %}
-        <div class="card mb-3">
+        <div class="card mb-3 {{ event.event_id }}">
           <div class="row g-0 align-items-center">
             <div class="col-sm-4">
               <img src="{{ event.imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
