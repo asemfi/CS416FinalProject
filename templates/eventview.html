@@ -49,12 +49,17 @@
       </div>
 
       <ul class="list-group list-group-flush" id="comment-section">
+        <li class="list-group-item list-group-item-dark">
+          <div class="fw-bold h4 text-center">Comments</div>
+        </li>
         {#TODO:#}
         {#  add way to add comments #}
         <li class="list-group-item">
           {% if user.is_authenticated %}
             <!-- form for adding comment -->
             <!-- check if user has already left a comment -->
+            <!--    if yes, prompts should autofill with current comment info -->
+            <!--    if yes, should have options to update or delete comment -->
             {% if commentExists %}
               <div class="ms-2 me-auto text-center">
                 You've already left a comment here
