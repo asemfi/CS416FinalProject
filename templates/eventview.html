@@ -51,12 +51,24 @@
       <ul class="list-group list-group-flush" id="comment-section">
         {#TODO:#}
         {#  add way to add comments #}
+      {% if comments %}
+        <!-- Array is not empty -->
         {% for comment in comments %}
           <li class="list-group-item">
-            <strong>{{ comment.user}}</strong> <br>
-            {{ comment.comment }}
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">{{ comment.user}}</div>
+              {{ comment.comment }}
+            </div>
           </li>
         {% endfor %}
+      {% else %}
+        <!-- Array is empty -->
+        <li class="list-group-item disabled">
+          <div class="ms-2 me-auto text-center">
+            No Comments to Display
+          </div>
+        </li>
+      {% endif %}
       </ul>
 
     </div>
