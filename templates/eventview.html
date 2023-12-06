@@ -50,11 +50,13 @@
 
       <ul class="list-group list-group-flush" id="comment-section">
         {#TODO:#}
-        {#  check for/print comments #}
         {#  add way to add comments #}
-        <li class="list-group-item">A comment</li>
-        <li class="list-group-item">A second comment</li>
-        <li class="list-group-item">A third comment</li>
+        {% for comment in comments %}
+          <li class="list-group-item">
+            <strong>{{ comment.user}}</strong> <br>
+            {{ comment.comment }}
+          </li>
+        {% endfor %}
       </ul>
 
     </div>

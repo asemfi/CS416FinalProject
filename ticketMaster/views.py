@@ -24,11 +24,14 @@ def ticketmaster(request):
             # Set up an error message using Django's message utility to inform the user
 
             # has city but no search_term
-            if city: messages.info(request, 'Search term cannot be empty. Please enter a search term.')
+            if city:
+                messages.info(request, 'Search term cannot be empty. Please enter a search term.')
             # has search_term but no city
-            elif search_term: messages.info(request, 'City cannot be empty. Please enter a city.')
+            elif search_term:
+                messages.info(request, 'City cannot be empty. Please enter a city.')
             # has neither
-            else: messages.info(request, 'Both keyword and city are required fields.')
+            else:
+                messages.info(request, 'Both keyword and city are required fields.')
 
             # redirect user to the index page
             return redirect('ticketmaster')
@@ -140,8 +143,6 @@ def ticketmaster(request):
                 # redirect user to the index page
                 return redirect('ticketmaster')
 
-
-
     # all other cases, just render the page without sending/passing any context to the template
     print('return without post or get')
     return render(request, 'ticketmaster.html')
@@ -151,17 +152,21 @@ def view_event(request, event_id):
     # Get the event based on its id
     event = Event.objects.get(event_id=event_id)
 
+    # get array of comments
+    comment_list = Comment.objects.filter(eventID__event_id=event_id)
+
     context = {
-                        'event_id': event_id,
-                        'eventName': event.eventName,
-                        'eventLink': event.eventLink,
-                        'imageLink': event.imageLink,
-                        'venue': event.venue,
-                        'localDate': event.localDate.strftime("%a %b %d %Y"),
-                        'localTime': event.localTime.strftime("%I:%M %p"),
-                        'address': event.address,
-                        'cityState': event.cityState
-                    }
+        'event_id': event_id,
+        'eventName': event.eventName,
+        'eventLink': event.eventLink,
+        'imageLink': event.imageLink,
+        'venue': event.venue,
+        'localDate': event.localDate.strftime("%a %b %d %Y"),
+        'localTime': event.localTime.strftime("%I:%M %p"),
+        'address': event.address,
+        'cityState': event.cityState,
+        'comments': comment_list
+    }
     return render(request, 'eventview.html', context)
 
 
