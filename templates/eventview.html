@@ -5,5 +5,51 @@
 {% endblock %}
 
 {% block body %}
-  <p>{{ event_id }}</p>
+  <div class="container-fluid text-center" id="top-div">
+    <div class="row">
+      <div class="col">
+        <h1 class="display-3">Ticketmaster</h1>
+          <h5 class="display-6 mb-5 fw-bolder">Quickly Find Tickets around you</h5>
+      </div>
+    </div>
+  </div>
+
+  <section class="shadow p-5" id="results">
+        <div class="card mb-3 {{ event_id }}">
+          <div class="row g-0 align-items-center">
+            <div class="col-sm-4">
+              <img src="{{ imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
+            </div>
+            <div class="col-sm-8">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h3 class="card-title display-4" id="event-title">
+                      {{ eventName }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-4">
+                    <small class="fs-4 text-success fw-bold" id="date">
+                                  {{ localDate }}
+                    </small><br>
+                    <small class="fw-light fs-6 text-success" id="time">
+                      {{ localTime }}
+                    </small>
+                  </div>
+
+                  <p class="card-text text-muted display-6" id="venue-name"> {{ venue }}</p>
+                  <p class="card-text text-muted " id="address"> {{ address }}<br> {{ cityState }}</p>
+                  <div>
+                    <div>
+                      <div class="col-4-sm">
+                        <a class="btn btn-primary" href=" {{ eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
 {% endblock %}

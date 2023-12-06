@@ -152,8 +152,18 @@ def ticketmaster(request):
 
 def view_event(request, event_id):
     # Get the event based on its id
-    # event = Event.objects.get(id=event_id)
-    context = {'event_id': event_id}
+    event = Event.objects.get(event_id=event_id)
+    context = {
+                        'event_id': event_id,
+                        'eventName': event.eventName,
+                        'eventLink': event.eventLink,
+                        'imageLink': event.imageLink,
+                        'venue': event.venue,
+                        'localDate': event.localDate,
+                        'localTime': event.localTime,
+                        'address': event.address,
+                        'cityState': event.cityState
+                    }
     return render(request, 'eventview.html', context)
 
 
