@@ -35,20 +35,7 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script>
-    // Ensures the DOM is fully loaded before attaching the click event
-    $(function(){
-      $('div.card').each(function(index, element) {
-        //gets all classes of element as a list
-        let classes = $(element).attr('class').split(' ');
-        console.log(classes[2])
-        // event_id is the third class
-        $(element).click(function() {
-          // Redirect to a new page
-          window.location.href = `/ticketmaster/event/view/${classes[2]}`;
-        });
-      })
-    });
-  </script>
+  {% block script %}
+  {% endblock %}
 </body>
 </html>
