@@ -25,7 +25,7 @@ class Event(models.Model):
 
 class Comment(models.Model):
     eventID = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     starRating = models.IntegerField(default=-1, editable=True, validators=[
             MaxValueValidator(5),
             MinValueValidator(-1)
