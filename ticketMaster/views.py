@@ -155,6 +155,9 @@ def view_event(request, event_id):
     # get array of comments
     comment_list = Comment.objects.filter(eventID__event_id=event_id)
 
+    # check if user has already left a comment
+    already_commented = Comment.objects.get(user=request.user)
+
     context = {
         'event_id': event_id,
         'eventName': event.eventName,
@@ -165,8 +168,18 @@ def view_event(request, event_id):
         'localTime': event.localTime.strftime("%I:%M %p"),
         'address': event.address,
         'cityState': event.cityState,
-        'comments': comment_list
+        'comments': comment_list,
+        'commentExists': already_commented,
+        'commentInfo': {
+            'userRating': -1,
+            'userComment': ''
+        }
     }
+
+    if already_commented:
+        context['commentInfo']['userRating'] = already_commented.starRating
+        context['commentInfo']['userComment'] = already_commented.comment
+
     return render(request, 'eventview.html', context)
 
 

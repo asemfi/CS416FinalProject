@@ -51,6 +51,26 @@
       <ul class="list-group list-group-flush" id="comment-section">
         {#TODO:#}
         {#  add way to add comments #}
+        <li class="list-group-item">
+          {% if user.is_authenticated %}
+            <!-- form for adding comment -->
+            <!-- check if user has already left a comment -->
+            {% if commentExists %}
+              <div class="ms-2 me-auto text-center">
+                You've already left a comment here
+              </div>
+            {% else %}
+              <div class="ms-2 me-auto text-center">
+                Add a Comment
+              </div>
+            {% endif %}
+          {% else %}
+            <!-- prompt to log in -->
+            <div class="ms-2 me-auto text-center">
+              Please log in to Add a comment
+            </div>
+          {% endif %}
+        </li>
       {% if comments %}
         <!-- Array is not empty -->
         {% for comment in comments %}
