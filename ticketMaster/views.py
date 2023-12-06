@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from django.utils import timezone
+
 from .models import Event, Comment, SavedEvent
 
 
@@ -118,7 +120,7 @@ def ticketmaster(request):
                     #   if not, add it
                     if not Event.objects.filter(event_id=event_id).exists():
                         event_details['localDate'] = date_object
-                        event_details['localTime'] = date_object
+                        event_details['localTime'] = time_obj
                         # Create a new row using the create method
                         Event.objects.create(**event_details)
 
@@ -140,11 +142,6 @@ def ticketmaster(request):
 
 
 
-
-
-
-
-
     # all other cases, just render the page without sending/passing any context to the template
     print('return without post or get')
     return render(request, 'ticketmaster.html')
@@ -153,14 +150,15 @@ def ticketmaster(request):
 def view_event(request, event_id):
     # Get the event based on its id
     event = Event.objects.get(event_id=event_id)
+
     context = {
                         'event_id': event_id,
                         'eventName': event.eventName,
                         'eventLink': event.eventLink,
                         'imageLink': event.imageLink,
                         'venue': event.venue,
-                        'localDate': event.localDate,
-                        'localTime': event.localTime,
+                        'localDate': event.localDate.strftime("%a %b %d %Y"),
+                        'localTime': event.localTime.strftime("%I:%M %p"),
                         'address': event.address,
                         'cityState': event.cityState
                     }
