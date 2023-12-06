@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ eventName }}
+  {{ eventName }}
 {% endblock %}
 
 {% block search %}
@@ -9,7 +9,7 @@
 
 {% block body %}
   <section class="shadow p-5" id="results">
-        <div class="card mb-3 {{ event_id }}">
+    <div class="card mb-3 {{ event_id }}">
           <div class="row g-0 align-items-center">
             <div class="col-sm-4">
               <img src="{{ imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-    </section>
+  </section>
 {% endblock %}
 
 {% block script %}
