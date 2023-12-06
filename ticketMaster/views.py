@@ -211,3 +211,11 @@ def get_event_search(search_term, city_name, ):
 
         # Return None to indicate failure
         return None
+
+
+def update_comment(request):
+    return None
+
+
+def delete_comment(request):
+    return None
