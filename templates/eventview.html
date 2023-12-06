@@ -49,14 +49,32 @@
       </div>
 
       <ul class="list-group list-group-flush" id="comment-section">
-        <li class="list-group-item list-group-item-dark">
+        <li class="list-group-item" id="comment-header">
           <div class="fw-bold h4 text-center">Comments</div>
         </li>
         {#TODO:#}
         {#  add way to add comments #}
         <li class="list-group-item">
+
           {% if user.is_authenticated %}
             <!-- form for adding comment -->
+            <form id="comment-form" method="post" action="{% url 'update_comment' event_id %}">
+              {% csrf_token %}
+              <!-- Star rating scale container -->
+              <ul id="star-rating">
+                <li class="star" data-rating="1"><i class="bi bi-star"></i></li>
+                <li class="star" data-rating="2"><i class="bi bi-star"></i></li>
+                <li class="star" data-rating="3"><i class="bi bi-star"></i></li>
+                <li class="star" data-rating="4"><i class="bi bi-star"></i></li>
+                <li class="star" data-rating="5"><i class="bi bi-star"></i></li>
+              </ul>
+              <!-- Hidden input field to store the users rating -->
+              <input type="hidden" name="rating" id="rating-input" value="">
+              <div class="mb-3">
+                <label for="comment-input" class="form-label">Comments:</label>
+                <textarea class="form-control" id="comment-input" name="comments" rows="3"></textarea>
+              </div>
+            </form>
             <!-- check if user has already left a comment -->
             <!--    if yes, prompts should autofill with current comment info -->
             <!--    if yes, should have options to update or delete comment -->
@@ -104,9 +122,34 @@
 {% block script %}
   <script>
     $(function(){
+      <!-- adds click function to return to search button -->
       $('#go-to-search').click(function () {
         window.location.href = `/ticketmaster`;
-      })
+      });
+
+      <!-- add star functionality -->
+      const stars = $('.star');
+      const ratingInput = $('#rating-input');
+      stars.click(function() {
+        let index = $(this).index();
+        // Update the value of the hidden input field
+        ratingInput.val(index + 1);
+
+        // Remove 'checked' class from all stars
+        stars.each(function(i, star) {
+          $(star).children('.bi').removeClass('bi-star-fill');
+          $(star).children('.bi').addClass('bi-star');
+          // Add 'bi-star-fill', remove 'bi-star' class to the clicked star and all stars before it
+          if (i <= index) {
+            $(star).children('.bi').addClass('bi-star-fill');
+            $(star).children('.bi').removeClass('bi-star');
+          }
+        });
+      });
+
+      <!-- if user has not commented yet -->
+        <!-- add a submit button -->
+      <!-- if user has a comment logged -->
     });
   </script>
 {% endblock %}

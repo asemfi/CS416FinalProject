@@ -121,7 +121,7 @@
 body{
     background-color: #fafafa;
 }
-#top-div{
+#top-div, #comment-header{
      background-color: var(--bs-primary);
      color: #fafafa;
 }
@@ -134,6 +134,17 @@ body{
 #go-to-search {
   margin-bottom: 1em;
   margin-top: -2em
+}
+ul#star-rating {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li.star {
+  display: inline-block;
+  margin: 0 5px;
+  font-size: 24px;
+  cursor: pointer;
 }
 #event-url{
     color: #fafafa;
