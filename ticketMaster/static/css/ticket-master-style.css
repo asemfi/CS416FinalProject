@@ -131,6 +131,10 @@ body{
 #city-msg{
     display: none;
 }
+#go-to-search {
+  margin-bottom: 1em;
+  margin-top: -1.5em
+}
 #event-url{
     color: #fafafa;
     text-decoration: none;
