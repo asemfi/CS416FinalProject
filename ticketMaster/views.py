@@ -42,15 +42,19 @@ def ticketmaster(request):
             if '_embedded' in event_search_result and event_search_result['_embedded']:
                 events = event_search_result['_embedded']['events']
 
+                # testing search results
+                returned_result = len(events)
+                print(returned_result)
+
                 # Initialize an empty list to store user data
                 event_list = []
 
-                # Iterate through each user in the 'events' list coming from the api
+                # Iterate through each event in the 'events' list coming from the api
                 # Rather than directly passing the "events" array to the template,
                 # the following approach allows server-side processing and formatting of specific data (e.g., date).
                 # So, the template only needs to plug in the preprocessed information.
                 for item in events:
-                    event = {}
+
                     event_name = item['name']
                     event_link = item['url']
                     event_img_url = item['images'][1]['url']
@@ -114,7 +118,8 @@ def ticketmaster(request):
                 print('printing event_list')
                 print(event_list)
                 # Create a context dictionary with the event_list and render the 'index.html' template
-                context = {'events': event_list}
+                context = {'events': event_list,
+                           'returned_result': returned_result}
                 return render(request, 'ticketmaster.html', context)
 
 

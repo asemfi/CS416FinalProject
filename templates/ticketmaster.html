@@ -56,6 +56,9 @@
 
            {% if events %}
                     <section class="shadow p-5" id="results">
+                    <div>
+    <h4 class="text-success fw-light " id="search-result">{{ returned_result }} Results Found</h4>
+</div>
                         {% for event in events %}
                             <div class="card mb-3">
         <div class="row g-0 align-items-center">
