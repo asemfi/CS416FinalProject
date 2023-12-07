@@ -5,16 +5,16 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import Event, Comment, SavedEvent
+from .forms import *
 
 
 def ticketmaster(request):
-    print('in ticketmaster')
     # if the request method is a post
     if request.method == 'POST':
-        print('inside post')
         # get the search term and location
         search_term = request.POST.get('search-term')
         city = request.POST.get('city')
@@ -39,7 +39,6 @@ def ticketmaster(request):
 
         # call get_event_search function() to get the data from the API
         event_search_result = get_event_search(search_term, city)
-        # print(event_search_result)
 
         # If the request to fetch data from ticketmaster was unsuccessful or returned None
         if event_search_result is None:
@@ -49,7 +48,6 @@ def ticketmaster(request):
             return redirect('ticketmaster')
 
         else:
-            print("Else Block")
             # print the response for testing purpose (open "Run" at the bottom to see what is printed)
             if '_embedded' in event_search_result and event_search_result['_embedded']:
                 events = event_search_result['_embedded']['events']
@@ -153,10 +151,10 @@ def view_event(request, event_id):
     event = Event.objects.get(event_id=event_id)
 
     # get array of comments
-    comment_list = Comment.objects.filter(eventID__event_id=event_id)
+    comment_list = get_comment_array(event_id)
 
-    # check if user has already left a comment
-    already_commented = Comment.objects.get(user=request.user)
+    # get user's comment
+    already_commented = get_comment(event_id, request.user)
 
     context = {
         'event_id': event_id,
@@ -213,9 +211,56 @@ def get_event_search(search_term, city_name, ):
         return None
 
 
-def update_comment(request):
-    return None
+def update_comment(request, event_id):
+    if request.method == 'POST':
+        print('request method is post')
+        print('event_id = ' + event_id)
+        form = CommentForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            user = request.user
+            star_rating = form.cleaned_data['starRating']
+            comment_text = form.cleaned_data['comment']
+            success = update_comment_content(event_id, user, star_rating, comment_text)
+
+            if success:
+                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
 
 
 def delete_comment(request):
     return None
+
+
+def get_comment(event_id, user):
+    try:
+        comment = Comment.objects.get(eventID__event_id=event_id, user=user)
+        return comment
+    except Comment.DoesNotExist:
+        # when event has no comment from user
+        return None
+
+
+def get_comment_array(event_id):
+    try:
+        comments = Comment.objects.filter(eventID__event_id=event_id)
+        return comments
+    except Comment.DoesNotExist:
+        # when event has no comments
+        return None
+
+
+def update_comment_content(event_id, user, rating, comment):
+    try:
+        # Get the comment based on the event id
+        user_comment = get_comment(event_id, user)
+        user_comment.comment = comment
+        user_comment.starRating = rating
+        # Save the changes to the database
+        user_comment.save()
+        return comment
+
+    except Comment.DoesNotExist:
+        return None

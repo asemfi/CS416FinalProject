@@ -69,11 +69,12 @@
                 <li class="star" id="star5"><i class="bi bi-star"></i></li>
               </ul>
               <!-- Hidden input field to store the users rating -->
-              <input type="hidden" name="rating" id="rating-input" value="">
+              <input type="hidden" name="starRating" id="rating-input" value="">
               <div class="mb-3">
                 <label for="comment-input" class="form-label">Comments:</label>
-                <textarea class="form-control" id="comment-input" name="comments" rows="3"></textarea>
+                <textarea class="form-control" id="comment-input" name="comment" rows="3"></textarea>
               </div>
+              <div class="row d-flex float-end" id="button-holder"></div>
             </form>
             <!-- check if user has already left a comment -->
             <!--    if yes, prompts should autofill with current comment info -->
@@ -152,16 +153,37 @@
           });
         });
 
+        let form = $('#button-holder');
         {% if commentExists %}
-          <!-- if user has a comment logged -->
-            <!-- populate fields -->
-            $('#star' + userRating).trigger('click');
-            $('#comment-input').val(userComment);
-            <!-- add an update button -->
-            <!-- add a delete button -->
+        <!-- if user has a comment logged -->
+          <!-- populate fields -->
+          $('#star' + userRating).trigger('click');
+          $('#comment-input').val(userComment);
+          <!-- add a delete button -->
+          let deleteButt = $('<button>', {
+            type: 'submit',
+            text: 'Delete Comment',
+            class: 'btn btn-danger',
+            id: 'delete-button'
+          });
+          form.append(deleteButt);
+          <!-- add an update button -->
+          let updateButt = $('<button>', {
+            type: 'submit',
+            text: 'Update Comment',
+            class: 'btn btn-primary',
+            id: 'update-button'
+          });
+          form.append(updateButt);
         {% else %}
           <!-- if user has not commented yet -->
             <!-- add a submit button -->
+          let submitButt = $('<button>', {
+            type: 'submit',
+            text: 'Comment',
+            class: 'btn btn-primary',
+            id: 'submit-button'
+          });
         {% endif %}
       {% else %}
       {% endif %}
