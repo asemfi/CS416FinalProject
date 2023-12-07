@@ -26,9 +26,9 @@
                 <li class="nav-item">
                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                   <a class="nav-link active" aria-current="page" href="{% url 'ticketmaster' %}">Ticket Master</a>
-                </li>
+{#                <li class="nav-item">#}
+{#                   <a class="nav-link active" aria-current="page" href="{% url 'ticketmaster' %}">Ticket Master</a>#}
+{#                </li>#}
 
 
                     {% if user.is_authenticated %}
@@ -37,10 +37,10 @@
                             <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#"
                                role="button" aria-expanded="false">{{ user.username }}</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'index' %}">Home</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+{#                                <li><a class="dropdown-item" href="{% url 'index' %}">Home</a></li>#}
+{#                                <li>#}
+{#                                    <hr class="dropdown-divider">#}
+{#                                </li>#}
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
