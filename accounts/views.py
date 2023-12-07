@@ -26,10 +26,12 @@ def register_view(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+
 def delete_user(request):
     user = User.objects.get(user=request.user)
     user.delete()
     return redirect('index')
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -74,5 +76,3 @@ class PasswordResetView(PasswordConteexMixin, FormView):
     from_email = ''
     html_email_template_name = None
     subject_template_name = 'registration/password_reset_subject.txt'
-
-
