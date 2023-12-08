@@ -16,7 +16,8 @@
 
 <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body fixed-top" data-bs-theme="dark">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'ticketmaster' %}">Ticket Master</a>
+        <a class="navbar-brand" href="{% url 'ticketmaster' %}">
+            <i class="fa-solid fa-ticket"></i> Ticket Master</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,36 +25,41 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                   <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">
+                        <i class="fa-solid fa-igloo"></i> Home</a>
                 </li>
-{#                <li class="nav-item">#}
-{#                   <a class="nav-link active" aria-current="page" href="{% url 'ticketmaster' %}">Ticket Master</a>#}
-{#                </li>#}
+
+                {#                <li class="nav-item">#}
+                {#                   <a class="nav-link active" aria-current="page" href="{% url 'ticketmaster' %}">Ticket Master</a>#}
+                {#                </li>#}
 
 
-                    {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#"
-                               role="button" aria-expanded="false">{{ user.username }}</a>
-                            <ul class="dropdown-menu">
-{#                                <li><a class="dropdown-item" href="{% url 'index' %}">Home</a></li>#}
-{#                                <li>#}
-{#                                    <hr class="dropdown-divider">#}
-{#                                </li>#}
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#"
+                           role="button" aria-expanded="false"> Hello!
+                            <i class="fa-solid fa-user-tie"></i> {{ user.username }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'update' %}">
+                                <i class="fa-solid fa-gear"></i> Edit Profile </a>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">
+                              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
                         </ul>
+                    </li>
+                    </ul>
 
-                    {% else %}
-                        <div class="m-2">
-                            <a class="btn btn-light" href={% url 'login' %}>Login</a>
+                {% else %}
+                    <div class="m-2">
+                        <a class="btn btn-light" href={% url 'login' %}>Login</a>
 
-                            <a class="btn btn-light" href={% url 'register' %}>Register</a>
-                        </div>
+                        <a class="btn btn-light" href={% url 'register' %}>Register</a>
+                    </div>
 
-                    {% endif %}
+                {% endif %}
         </div>
     </div>
 </nav>

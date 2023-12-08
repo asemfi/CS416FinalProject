@@ -14,6 +14,15 @@ def index(request):
     return render(request, 'accounts/index.html')
 
 
+def update_view(request):
+    user = request.user
+    user_object = User.objects.get(id=user.id)
+
+    form = SignUpForm(instance=user_object)
+    context = {'form': form}
+    return render(request, 'accounts/update.html', context)
+
+
 def register_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -54,7 +63,7 @@ def logout_view(request):
     return redirect('index')
 
 
-class PasswordConteexMixin:
+class PasswordContexMixin:
     extra_context = None
 
     def __init__(self):
@@ -68,11 +77,22 @@ class PasswordConteexMixin:
         })
         return context
 
+#
+# class PasswordContextMixin:
+#     extra_context = None
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context.update(
+#             {"title": self.title, "subtitle": None, **(self.extra_context or {})}
+#         )
+#         return context
 
-class PasswordResetView(PasswordConteexMixin, FormView):
+
+class PasswordResetView(PasswordContexMixin, FormView):
     email_template_name = 'registration/password_reset_email.html'
     extra_email_context = None
     from_class = PasswordResetForm
-    from_email = ''
+    from_email = 'ticketmasterapi@outlook.com'
     html_email_template_name = None
     subject_template_name = 'registration/password_reset_subject.txt'
