@@ -64,7 +64,7 @@
         <li class="list-group-item">
           {% if user.is_authenticated %}
             <!-- form for adding comment -->
-            <form id="comment-form" method="post">
+            <form id="comment-form" method="POST">
               {% csrf_token %}
               <!-- Star rating scale container -->
               <ul id="star-rating">
@@ -80,18 +80,10 @@
                 <label for="comment-input" class="form-label">Comments:</label>
                 <textarea class="form-control" id="comment-input" name="comment" rows="3"></textarea>
               </div>
+              <div class="error-message alert alert-danger justify-content-start mx-auto mb-2" id="rating-error">Please select a star rating.</div>
+              <div class="error-message alert alert-danger justify-content-start mx-auto mb-2" id="comment-error">Please enter a comment.</div>
               <div class="row d-flex float-end" id="button-holder"></div>
             </form>
-            <!-- check if user has already left a comment -->
-            <!--    if yes, prompts should autofill with current comment info -->
-            <!--    if yes, should have options to update or delete comment -->
-            {% if commentExists %}
-            {% else %}
-              <div class="ms-2 me-auto text-center">
-                Add a Comment
-              </div>
-
-            {% endif %}
           {% else %}
             <!-- prompt to log in -->
             <div class="p-3 me-auto text-center">
@@ -157,6 +149,7 @@
     let userComment = '{{ commentInfo.userComment|default:""|safe }}';
 
     $(function(){
+      $(".error-message").hide();
       <!-- adds click function to return to search button -->
       $('#go-to-search').click(function () {
         window.location.href = `/ticketmaster`;
@@ -167,8 +160,26 @@
       <!-- only run if user is logged in -->
       {% if user.is_authenticated %}
         <!-- dynamically handle form submission -->
-        function submitForm(action) {
-          console.log('in submitForm')
+        function submitForm(action, deleting) {
+          let rating = $("#rating-input").val();
+          let comment = $("#comment-input").val();
+
+          // Reset previous error messages
+          $(".error-message").hide();
+
+          if(!deleting){
+            // Validate star rating
+             if (!rating) {
+               $("#rating-error").show();
+               return;
+             }
+
+            // Validate comments
+            if (!comment.trim()) {
+              $("#comment-error").show();
+              return;
+            }
+          }
           let form = $('#comment-form');
           // Update the form action attribute
           form.attr('action', action);
@@ -214,7 +225,7 @@
           form.append(deleteButt);
           <!-- add onClick to #deleteComment in the modal -->
           $('#deleteComment').click(function() {
-            submitForm("{% url 'delete_comment' event_id %}");
+            submitForm("{% url 'delete_comment' event_id %}", true);
           });
 
           <!-- add an update button -->
@@ -224,7 +235,7 @@
             class: 'btn btn-primary submit-button',
             id: 'update-button',
             click: function() {
-              submitForm("{% url 'update_comment' event_id %}");
+              submitForm("{% url 'update_comment' event_id %}", false);
             }
           });
           form.append(updateButt);
@@ -237,7 +248,7 @@
             class: 'btn btn-primary submit-button',
             id: 'submit-comment-button',
             click: function() {
-              submitForm("{% url 'create_comment' event_id %}");
+              submitForm("{% url 'create_comment' event_id %}", false);
             }
           });
           form.append(submitButt);

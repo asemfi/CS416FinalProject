@@ -128,6 +128,10 @@ body{
 #search-term-msg{
     display: none;
 }
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
 #city-msg{
     display: none;
 }
