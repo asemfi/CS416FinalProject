@@ -7,7 +7,7 @@ from django.contrib import messages
 from accounts.forms import SignUpForm, EditUserForm
 from django.contrib.auth.models import User
 
-
+# Rana Naimat
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
