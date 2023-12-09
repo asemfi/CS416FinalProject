@@ -223,7 +223,7 @@ def delete_comment(request, event_id):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment.delete()
-            return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+            return redirect(reverse('view_event', kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
 
@@ -238,7 +238,7 @@ def update_comment(request, event_id):
             success = update_comment_content(event_id, user, star_rating, comment_text)
 
             if success:
-                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+                return redirect(reverse('view_event', kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
 
@@ -254,7 +254,7 @@ def create_comment(request, event_id):
             comment = Comment(eventID_id=e_id, user_id=user, starRating=star_rating, comment=comment_text)
             comment.full_clean()
             comment.save()
-            return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+            return redirect(reverse('view_event', kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
 

@@ -98,7 +98,15 @@
         {% for comment in comments %}
           <li class="list-group-item">
             <div class="ms-2 me-auto">
-              <div class="fw-bold">{{ comment.user}}</div>
+              <div class="fw-bold">{{ comment.user}}
+                {% for i in "12345" %}
+                  {% if i|add:0 <= comment.starRating %}
+                    <i class="bi bi-star-fill"></i>
+                  {% else %}
+                    <i class="bi bi-star"></i>
+                  {% endif %}
+                {% endfor %}
+              </div>
               {{ comment.comment }}
             </div>
           </li>
