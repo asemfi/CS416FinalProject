@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView
 from django.contrib import messages
-from accounts.forms import SignUpForm
+from accounts.forms import SignUpForm, EditUserForm
 from django.contrib.auth.models import User
 
 
@@ -18,7 +18,15 @@ def update_view(request):
     user = request.user
     user_object = User.objects.get(id=user.id)
 
-    form = SignUpForm(instance=user_object)
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=user_object)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+    else:
+        form = EditUserForm(instance=user_object)
+
     context = {'form': form}
     return render(request, 'accounts/update.html', context)
 
@@ -76,17 +84,6 @@ class PasswordContexMixin:
             **(self.extra_context or {})
         })
         return context
-
-#
-# class PasswordContextMixin:
-#     extra_context = None
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context.update(
-#             {"title": self.title, "subtitle": None, **(self.extra_context or {})}
-#         )
-#         return context
 
 
 class PasswordResetView(PasswordContexMixin, FormView):
