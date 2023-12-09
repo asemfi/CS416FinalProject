@@ -6,34 +6,43 @@
 {% endblock %}
 {% block body %}
 
-    <section class="container p-5 shadow my-5 bg-body rounded">
+    <section class="container p-5 shadow my-5 bg-white rounded bg-warning">
 
-        <div class="row justify-content-center">
+        <div class="row justify-content-center ">
             <div class="col-lg-7 ">
-                <h1> Home Page</h1>
+                <h1 class="display-1 text-secondary"> Home Page</h1>
+                <div class="col-lg-7">
 
-                {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
 
-                    {% if user.first_name == '' %}
-                        <h3>Welcome {{ user.username }} !!</h3>
-                    {% else %}
-                        <h3> {{ user.first_name }} {{ user.last_name }}</h3>
+                        {% if user.first_name == '' %}
+                            <h3 class="display-2 text-success">Welcome !! {{ user.username }}</h3>
+                        {% else %}
+                            <h3 class="display-2 text-success"> Welcome
+                                !! {{ user.first_name }} {{ user.last_name }}</h3>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-7">
-
-                            <p> {{ user.bio }}</p>
-
-                        </div>
-                    </div>
                 </div>
+
 
             </div>
         </div>
 
+        <div class="container p-5 shadow my-5 bg-white rounded">
+            <div class="row gy-3 align-items-center">
+                <div class="col-xl">
 
+                    <h1>
+                        " A place where you can find the tickets of your choice at your price "
+                    </h1>
+
+                </div>
+                <div class="col-lg-7 order-1 order-md-2">
+                    <img src="https://img.freepik.com/free-photo/abstract-watercolor-guitar-exploding-with-colorful-motion-generated-by-ai_188544-19725.jpg?w=2000&t=st=1702152845~exp=1702153445~hmac=ac0fff641f52b390ab1bf1332840e7958d54d18195394f6b740b6139c9a29665"
+                         class="img-fluid" alt=""/>
+                </div>
+            </div>
+        </div>
     </section>
 {% endblock %}
