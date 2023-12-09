@@ -218,14 +218,16 @@ def get_event_search(search_term, city_name, ):
 
 
 def delete_comment(request, event_id):
-    # if request.method == 'POST':
-    #     user = request.user
-    #     form = CommentForm(request.POST)
-    #     if form.is_valid():
-    #
-    #         if True:
-    #             return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+    print('user: ' + request.user.username)
+    print('eventID: ' + event_id)
+    comment = Comment.objects.get(eventID__event_id=event_id, user=request.user)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment.delete()
+            return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
+    print('error when deleting')
     return redirect('ticketmaster')
 
 
