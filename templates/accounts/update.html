@@ -3,15 +3,27 @@
 {% load static %}
 {% block body %}
 
-    <form action="" method="post">
-        {% csrf_token %}
 
-        {{ form|crispy }}
+    <div class="container p-5 shadow my-5 bg-body rounded item-align-center">
+    <div>
+            <div class="row content-align-center">
+                <div class="col-6">
+                    <h1>Edit Info</h1>
+                </div>
+            </div>
+        </div>
+
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {{ form|crispy }}
 
 
-        <button class="btn btn-outline-primary btn-lg" type="submit">
-            <i class="fas fa-sign-in-alt"></i> Update
-        </button>
-    </form>
+            <button class="btn btn-outline-primary btn-lg" type="submit">
+                <i class="fas fa-sign-in-alt"></i> Update
+            </button>
+        </form>
+
+    </div>
 
 {% endblock %}

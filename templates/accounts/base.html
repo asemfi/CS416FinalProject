@@ -63,10 +63,11 @@
     </div>
 </nav>
 
+<div class="container bg-success ">
 
-{#logout notification#}
+    {#logout notification#}
 
-<div class="container my-5">
+<div class="container my-5 ">
     <ul>
         {% for message in messages %}
             <div class="alert alert-danger" role="alert">
@@ -81,12 +82,14 @@
     </ul>
 </div>
 
-<div class="container my-5">
+<div class="container my-5 ">
 
 
     {% block body %}
 
     {% endblock %}
+
+</div>
 
 </div>
 
