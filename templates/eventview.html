@@ -154,6 +154,7 @@
       {% if user.is_authenticated %}
         <!-- dynamically handle form submission -->
         function submitForm(action) {
+          console.log('in submitForm')
           let form = $('#comment-form');
           // Update the form action attribute
           form.attr('action', action);
@@ -198,7 +199,9 @@
           });
           form.append(deleteButt);
           <!-- add onClick to #deleteComment in the modal -->
-          $('#deleteComment').click('submitForm({% url 'delete_comment' event_id %})');
+          $('#deleteComment').click(function() {
+            submitForm("{% url 'delete_comment' event_id %}");
+          });
 
           <!-- add an update button -->
           let updateButt = $('<button>', {
@@ -206,7 +209,9 @@
             text: 'Update Comment',
             class: 'btn btn-primary submit-button',
             id: 'update-button',
-            onclick: 'submitForm({% url 'update_comment' event_id %}'
+            click: function() {
+              submitForm("{% url 'update_comment' event_id %}");
+            }
           });
           form.append(updateButt);
         {% else %}

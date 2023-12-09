@@ -149,7 +149,12 @@ def ticketmaster(request):
 def view_event(request, event_id):
     # Get the event based on its id
     print("Event ID:", event_id)
-    event = Event.objects.get(event_id=event_id)
+    try:
+        event = Event.objects.get(event_id=event_id)
+        print("Event found:", event)
+    except Event.DoesNotExist:
+        print("Event does not exist.")
+        return render(request, 'ticketmaster.html')
 
     # get array of comments
     comment_list = get_comment_array(event_id)
@@ -212,19 +217,19 @@ def get_event_search(search_term, city_name, ):
         return None
 
 
-def update_comment(request, event_id):
-    if request.method == 'POST':
-        user = request.user
-        form = CommentForm(request.POST)
-        if form.is_valid():
-
-            if True:
-                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+def delete_comment(request, event_id):
+    # if request.method == 'POST':
+    #     user = request.user
+    #     form = CommentForm(request.POST)
+    #     if form.is_valid():
+    #
+    #         if True:
+    #             return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
 
 
-def delete_comment(request, event_id):
+def update_comment(request, event_id):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
