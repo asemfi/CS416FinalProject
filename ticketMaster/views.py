@@ -254,8 +254,7 @@ def create_comment(request, event_id):
             comment = Comment(eventID_id=e_id, user_id=user, starRating=star_rating, comment=comment_text)
             comment.full_clean()
             comment.save()
-            if True:
-                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+            return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
 
