@@ -148,6 +148,7 @@ def ticketmaster(request):
 
 def view_event(request, event_id):
     # Get the event based on its id
+    print("Event ID:", event_id)
     event = Event.objects.get(event_id=event_id)
 
     # get array of comments
@@ -213,12 +214,20 @@ def get_event_search(search_term, city_name, ):
 
 def update_comment(request, event_id):
     if request.method == 'POST':
-        print('request method is post')
-        print('event_id = ' + event_id)
+        user = request.user
         form = CommentForm(request.POST)
-        print(request.POST)
         if form.is_valid():
-            print('form is valid')
+
+            if True:
+                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
+
+
+def delete_comment(request, event_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
             user = request.user
             star_rating = form.cleaned_data['starRating']
             comment_text = form.cleaned_data['comment']
@@ -228,10 +237,6 @@ def update_comment(request, event_id):
                 return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')
-
-
-def delete_comment(request):
-    return None
 
 
 def get_comment(event_id, user):
