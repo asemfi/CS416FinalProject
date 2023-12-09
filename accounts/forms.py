@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 
 
+# Rana Naimat
 class SignUpForm(UserCreationForm):
     email = forms.EmailField()
     first_name = forms.CharField(max_length=100)

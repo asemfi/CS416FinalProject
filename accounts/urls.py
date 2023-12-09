@@ -2,7 +2,7 @@ from django.urls import path, include
 
 from accounts import views
 from django.contrib.auth import views as auth_views
-
+# Rana Naimat
 urlpatterns = [
     path('', views.index, name="index"),
     path('register/', views.register_view, name="register"),

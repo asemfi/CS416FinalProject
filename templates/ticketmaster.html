@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    {#nav bar #}
+    {#nav bar  by Rana Naimat#}
 <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body fixed-top" data-bs-theme="dark">
     <div class="container">
         <a class="navbar-brand" href="{% url 'ticketmaster' %}">
@@ -17,11 +17,6 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'index' %}">
                         <i class="fa-solid fa-igloo"></i> Home</a>
                 </li>
-
-                {#                <li class="nav-item">#}
-                {#                   <a class="nav-link active" aria-current="page" href="{% url 'ticketmaster' %}">Ticket Master</a>#}
-                {#                </li>#}
-
 
                 {% if user.is_authenticated %}
 
