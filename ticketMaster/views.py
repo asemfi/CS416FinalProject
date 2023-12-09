@@ -148,7 +148,7 @@ def ticketmaster(request):
 
 def view_event(request, event_id):
     # Get the event based on its id
-    print("Event ID:", event_id)
+    current_user = request.user
     try:
         event = Event.objects.get(event_id=event_id)
         print("Event found:", event)
@@ -160,7 +160,12 @@ def view_event(request, event_id):
     comment_list = get_comment_array(event_id)
 
     # get user's comment
-    already_commented = get_comment(event_id, request.user)
+    if current_user.is_authenticated:
+        already_commented = get_comment(event_id, current_user)
+        saved = is_saved(event_id, current_user)
+    else:
+        already_commented = None
+        saved = None
 
     context = {
         'event_id': event_id,
@@ -176,7 +181,8 @@ def view_event(request, event_id):
         'commentExists': already_commented,
         'commentInfo': {
             'userRating': 0,
-            'userComment': ''
+            'userComment': '',
+            'favoriteEvent': saved
         }
     }
 
@@ -277,6 +283,14 @@ def get_comment_array(event_id):
         return None
 
 
+def is_saved(event_id, user):
+    try:
+        return SavedEvent.objects.get(eventID__event_id=event_id, user=user)
+    except SavedEvent.DoesNotExist:
+        # when event has no comments
+        return None
+
+
 def update_comment_content(event_id, user, rating, comment):
     try:
         # Get the comment based on the event id
@@ -289,3 +303,18 @@ def update_comment_content(event_id, user, rating, comment):
 
     except Comment.DoesNotExist:
         return None
+
+
+def toggle_save(request, event_id):
+    e_id = Event.objects.get(event_id=event_id).id
+    user = request.user.id
+    saved = is_saved(event_id, user)
+    if saved:
+        saved.delete()
+        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+    else:
+        new_save = SavedEvent(eventID_id=e_id, user_id=user)
+        new_save.full_clean()
+        new_save.save()
+        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+
