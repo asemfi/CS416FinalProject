@@ -218,8 +218,6 @@ def get_event_search(search_term, city_name, ):
 
 
 def delete_comment(request, event_id):
-    print('user: ' + request.user.username)
-    print('eventID: ' + event_id)
     comment = Comment.objects.get(eventID__event_id=event_id, user=request.user)
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -227,7 +225,6 @@ def delete_comment(request, event_id):
             comment.delete()
             return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
-    print('error when deleting')
     return redirect('ticketmaster')
 
 
@@ -241,6 +238,23 @@ def update_comment(request, event_id):
             success = update_comment_content(event_id, user, star_rating, comment_text)
 
             if success:
+                return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
+
+
+def create_comment(request, event_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            e_id = Event.objects.get(event_id=event_id).id
+            user = request.user.id
+            star_rating = form.cleaned_data['starRating']
+            comment_text = form.cleaned_data['comment']
+            comment = Comment(eventID_id=e_id, user_id=user, starRating=star_rating, comment=comment_text)
+            comment.full_clean()
+            comment.save()
+            if True:
                 return redirect(reverse('view_event',  kwargs={'event_id': event_id}))
 
     return redirect('ticketmaster')

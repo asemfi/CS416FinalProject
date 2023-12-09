@@ -216,13 +216,17 @@
           form.append(updateButt);
         {% else %}
           <!-- if user has not commented yet -->
-            <!-- add a submit button -->
+          <!-- add a submit button -->
           let submitButt = $('<button>', {
-            type: 'submit',
-            text: 'Comment',
-            class: 'btn btn-primary',
-            id: 'submit-button'
+            type: 'button',
+            text: 'Submit Comment',
+            class: 'btn btn-primary submit-button',
+            id: 'submit-comment-button',
+            click: function() {
+              submitForm("{% url 'create_comment' event_id %}");
+            }
           });
+          form.append(submitButt);
         {% endif %}
       <!-- Only run if no user is logged in > button to log in -->
       {% else %}
