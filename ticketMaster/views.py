@@ -6,13 +6,16 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from django.urls import reverse
+from django.utils import timezone
+
+from .models import Event, Comment, SavedEvent
+from .forms import *
 
 
 def ticketmaster(request):
-    print('in ticketmaster')
     # if the request method is a post
     if request.method == 'POST':
-        print('inside post')
         # get the search term and location
         search_term = request.POST.get('search-term')
         city = request.POST.get('city')
@@ -20,7 +23,16 @@ def ticketmaster(request):
         # Check if either search_term or city is empty
         if not search_term or not city:
             # Set up an error message using Django's message utility to inform the user
-            messages.info(request, 'Both keyword and city are required fields.')
+
+            # has city but no search_term
+            if city:
+                messages.info(request, 'Search term cannot be empty. Please enter a search term.')
+            # has search_term but no city
+            elif search_term:
+                messages.info(request, 'City cannot be empty. Please enter a city.')
+            # has neither
+            else:
+                messages.info(request, 'Both keyword and city are required fields.')
 
             # redirect user to the index page
             return redirect('ticketmaster')
@@ -50,15 +62,21 @@ def ticketmaster(request):
                 # Initialize an empty list to store user data
                 event_list = []
 
-                # Iterate through each event in the 'events' list coming from the api
+                # Iterate through each user in the 'events' list coming from the api
                 # Rather than directly passing the "events" array to the template,
                 # the following approach allows server-side processing and formatting of specific data (e.g., date).
                 # So, the template only needs to plug in the preprocessed information.
                 for item in events:
+                    event_id = item['id']
 
                     event_name = item['name']
                     event_link = item['url']
                     event_img_url = item['images'][1]['url']
+                    # make sure image stored is large to ensure quality
+                    for image in item['images']:
+                        if image['url'].lower().find("large") != -1:
+                            event_img_url = image['url']
+
                     # Adding error handling for potential missing keys
                     if 'dates' in item and 'start' in item['dates'] and 'dateTime' in item['dates']['start']:
                         event_date = item['dates']['start']['dateTime']
@@ -103,17 +121,29 @@ def ticketmaster(request):
 
                     # Create a new dictionary to store event details
                     event_details = {
-                        'event_name': event_name,
-                        'event_link': event_link,
-                        'event_img_url': event_img_url,
-                        'event_venue_name': event_venue_name,
-                        'event_time': formatted_time,
-                        'event_date': formatted_date,
-                        'event_address': event_address,
-                        'event_city_state': event_city_state,
+                        'event_id': event_id,
+                        'eventName': event_name,
+                        'eventLink': event_link,
+                        'imageLink': event_img_url,
+                        'venue': event_venue_name,
+                        'localDate': formatted_date,
+                        'localTime': formatted_time,
+                        'address': event_address,
+                        'cityState': event_city_state,
                         'google_map': google_map
 
                     }
+
+                    # check if event is in event table
+                    #   if not, add it
+                    if not Event.objects.filter(event_id=event_id).exists():
+                        event_details['localDate'] = date_object
+                        event_details['localTime'] = time_obj
+                        # Create a new row using the create method
+                        Event.objects.create(**event_details)
+
+                    event_details['localDate'] = formatted_date
+                    event_details['localTime'] = formatted_time
                     event_list.append(event_details)
 
                 print('printing event_list')
@@ -132,6 +162,53 @@ def ticketmaster(request):
     # all other cases, just render the page without sending/passing any context to the template
     print('return without post or get')
     return render(request, 'ticketmaster.html')
+
+
+def view_event(request, event_id):
+    # Get the event based on its id
+    current_user = request.user
+    try:
+        event = Event.objects.get(event_id=event_id)
+        print("Event found:", event)
+    except Event.DoesNotExist:
+        print("Event does not exist.")
+        return render(request, 'ticketmaster.html')
+
+    # get array of comments
+    comment_list = get_comment_array(event_id)
+
+    # get user's comment
+    if current_user.is_authenticated:
+        already_commented = get_comment(event_id, current_user)
+        saved = is_saved(event_id, current_user)
+    else:
+        already_commented = None
+        saved = None
+
+    context = {
+        'event_id': event_id,
+        'eventName': event.eventName,
+        'eventLink': event.eventLink,
+        'imageLink': event.imageLink,
+        'venue': event.venue,
+        'localDate': event.localDate.strftime("%a %b %d %Y"),
+        'localTime': event.localTime.strftime("%I:%M %p"),
+        'address': event.address,
+        'cityState': event.cityState,
+        'comments': comment_list,
+        'commentExists': already_commented,
+        'commentInfo': {
+            'userRating': 0,
+            'userComment': '',
+            'favoriteEvent': saved
+        }
+    }
+
+    if already_commented:
+        context['commentInfo']['userRating'] = already_commented.starRating
+        context['commentInfo']['userComment'] = already_commented.comment
+
+    return render(request, 'eventview.html', context)
 
 
 def get_event_search(search_term, city_name, ):
@@ -162,3 +239,100 @@ def get_event_search(search_term, city_name, ):
 
         # Return None to indicate failure
         return None
+
+
+def delete_comment(request, event_id):
+    comment = Comment.objects.get(eventID__event_id=event_id, user=request.user)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment.delete()
+            return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
+
+
+def update_comment(request, event_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            star_rating = form.cleaned_data['starRating']
+            comment_text = form.cleaned_data['comment']
+            success = update_comment_content(event_id, user, star_rating, comment_text)
+
+            if success:
+                return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
+
+
+def create_comment(request, event_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            e_id = Event.objects.get(event_id=event_id).id
+            user = request.user.id
+            star_rating = form.cleaned_data['starRating']
+            comment_text = form.cleaned_data['comment']
+            comment = Comment(eventID_id=e_id, user_id=user, starRating=star_rating, comment=comment_text)
+            comment.full_clean()
+            comment.save()
+            return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+
+    return redirect('ticketmaster')
+
+
+def get_comment(event_id, user):
+    try:
+        comment = Comment.objects.get(eventID__event_id=event_id, user=user)
+        return comment
+    except Comment.DoesNotExist:
+        # when event has no comment from user
+        return None
+
+
+def get_comment_array(event_id):
+    try:
+        comments = Comment.objects.filter(eventID__event_id=event_id)
+        return comments
+    except Comment.DoesNotExist:
+        # when event has no comments
+        return None
+
+
+def is_saved(event_id, user):
+    try:
+        return SavedEvent.objects.get(eventID__event_id=event_id, user=user)
+    except SavedEvent.DoesNotExist:
+        # when event has no comments
+        return None
+
+
+def update_comment_content(event_id, user, rating, comment):
+    try:
+        # Get the comment based on the event id
+        user_comment = get_comment(event_id, user)
+        user_comment.comment = comment
+        user_comment.starRating = rating
+        # Save the changes to the database
+        user_comment.save()
+        return comment
+
+    except Comment.DoesNotExist:
+        return None
+
+
+def toggle_save(request, event_id):
+    e_id = Event.objects.get(event_id=event_id).id
+    user = request.user.id
+    saved = is_saved(event_id, user)
+    if saved:
+        saved.delete()
+        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+    else:
+        new_save = SavedEvent(eventID_id=e_id, user_id=user)
+        new_save.full_clean()
+        new_save.save()
+        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+
