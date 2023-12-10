@@ -18,6 +18,7 @@ class Event(models.Model):
     localTime = models.TimeField(null=True)
     address = models.CharField(max_length=200)
     cityState = models.CharField(max_length=200, null=True)
+    googleMap = models.CharField(max_length=300, null=True)
 
     def __str__(self):
         return self.event_id
