@@ -23,10 +23,21 @@
         Iterate over each message in the messages list in case there is an error
       {% endcomment %}
       {% for message in messages %}
-        <div class="col-10 alert alert-danger justify-content-start mx-auto mb-2" id="search-error-msg">
-          <h5 class="justify-content-start">{{ message }}</h5>
-        </div>
-      {% endfor %}
+                    {% load static %}
+
+                    <div class="alert alert-danger" role="alert">
+                        <h4>{{ message }}</h4>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-12 ">
+                                <img src="{% static 'images/Cat.jpg' %}" alt="cat_image" class="img-fluid d-block mx-auto">
+                            </div>
+                        </div>
+                    </div>
+
+
+                {% endfor %}
     </div>
 {% endblock %}
 
@@ -60,7 +71,7 @@
                   </div>
 
                   <p class="card-text text-muted display-6" id="venue-name"> {{ event.venue }}</p>
-                  <p class="card-text text-muted " id="address"> {{ event.address }}<br> {{ event.cityState }}</p>
+                  <p class="card-text text-muted " id="address"> {{ event.address }}<br> {{ event.cityState }}<a href="{{ event.google_map }}" target="_blank"><i class="bi bi-compass"></i></a></p>
                   <div>
                     <div>
                       <div class="col-4-sm">
