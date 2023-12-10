@@ -1,98 +1,129 @@
 {% extends "base.html" %}
 
-{% block title %}
-  Search Events
-{% endblock %}
-
-{% block search %}
-    <div class="row mb-5 pb-2">
-      <div class="col-10 text-center mx-auto mb-2">
-        <form action="{% url 'ticketmaster' %}" method="post">
-          {% csrf_token %}
-          <div class="input-group">
-            <input type="text" aria-label="search-term" class="form-control"
-                               placeholder="Search by genre, arist or event" name="search-term">
-            <input type="text" aria-label="city" class="form-control"
-                               placeholder="Enter a city e.g.,Hartford"
-                               name="city">
-            <button type="submit" class="btn btn-danger" id="search-button">Search</button>
-          </div>
-        </form>
-      </div>
-      {% comment %}
-        Iterate over each message in the messages list in case there is an error
-      {% endcomment %}
-      {% for message in messages %}
-        <div class="col-10 alert alert-danger justify-content-start mx-auto mb-2" id="search-error-msg">
-          <h5 class="justify-content-start">{{ message }}</h5>
-        </div>
-      {% endfor %}
-    </div>
-{% endblock %}
 
 {% block body %}
-  {% comment %}
-    Show the section below if "event_list" array is passed from views.py via context variable. If so, then iterate over each user
-  {% endcomment %}
-  {% if events %}
-    <section class="shadow p-5" id="results">
-      {% for event in events %}
-        <div class="card mb-3 {{ event.event_id }}">
-          <div class="row g-0 align-items-center">
+
+    <div class="container-fluid text-center" id="top-div">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-3">Ticketmaster</h1>
+                <h5 class="display-6 mb-5 fw-bolder">Quickly Find Tickets around you</h5>
+            </div>
+        </div>
+
+        <div class="row mb-5 pb-2">
+            <div class="col-10 text-center mx-auto mb-2">
+                <form action="{% url 'ticketmaster' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="input-group">
+
+                        <input type="text" aria-label="search-term" class="form-control"
+                               placeholder="Search by genre, arist or event" name="search-term">
+                        <input type="text" aria-label="city" class="form-control"
+                               placeholder="Enter a city e.g.,Hartford"
+                               name="city">
+                        <button type="submit" class="btn btn-danger" id="search-button">Search</button>
+                    </div>
+
+                </form>
+
+
+            </div>
+            <div class="col-10 alert alert-danger justify-content-start mx-auto mb-2" id="search-term-msg">
+                <p class="justify-content-start">Search term cannot be empty.Please enter a search term.</p>
+            </div>
+            <div class="col-10 alert alert-danger justify-content-start mx-auto mb-2" id="city-msg">
+                <p class="justify-content-start">City cannot be empty.Please enter a city.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+     {% comment %}
+                Iterate over each message in the messages list in case there is an error
+            {% endcomment %}
+
+                {% for message in messages %}
+                    {% load static %}
+
+                    <div class="alert alert-danger" role="alert">
+                        <h4>{{ message }}</h4>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-12 ">
+                                <img src="{% static 'images/Cat.jpg' %}" alt="cat_image" class="img-fluid d-block mx-auto">
+                            </div>
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+
+
+      {% comment %}
+                Show the section below if "event_list" array is passed from views.py via context variable. If so, then iterate over each user
+            {% endcomment %}
+
+           {% if events %}
+                    <section class="shadow p-5" id="results">
+                    <div>
+    <h4 class="text-success fw-light " id="search-result">{{ returned_result }} Results Found</h4>
+</div>
+                        {% for event in events %}
+                            <div class="card mb-3">
+        <div class="row g-0 align-items-center">
             <div class="col-sm-4">
-              <img src="{{ event.imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
+                <img src="{{ event.event_img_url }}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
             </div>
             <div class="col-sm-8">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h3 class="card-title display-4" id="event-title">
-                      {{ event.eventName }}
-                    </h3>
-                  </div>
-                  <div class="col-sm-4">
-                    <small class="fs-4 text-success fw-bold" id="date">
-                                  {{ event.localDate }}
-                    </small><br>
-                    <small class="fw-light fs-6 text-success" id="time">
-                      {{ event.localTime }}
-                    </small>
-                  </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3 class="card-title display-4" id="event-title">
+                             {{ event.event_name }}
+                            </h3>
+                        </div>
+                        <div class="col-sm-4">
+                            <small class="fs-4 text-success fw-bold" id="date">
+                                {{ event.event_date }}
+                            </small><br>
+                            <small class="fw-light fs-6 text-success" id="time">
+                                {{ event.event_time }}
+                            </small>
+                        </div>
 
-                  <p class="card-text text-muted display-6" id="venue-name"> {{ event.venue }}</p>
-                  <p class="card-text text-muted " id="address"> {{ event.address }}<br> {{ event.cityState }}</p>
-                  <div>
-                    <div>
-                      <div class="col-4-sm">
-                        <a class="btn btn-primary" href=" {{ event.eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
-                      </div>
+                        <p class="card-text text-muted display-6" id="venue-name"> {{ event.event_venue_name }}</p>
+                        <p class="card-text text-muted " id="address"> {{ event.event_address }}<br> {{ event.event_city_state }} <a href="{{ event.google_map }}" target="_blank"><i class="bi bi-compass"></i></a></p>
+                        <div>
+                            <div>
+                                <div class="col-4-sm">
+                                     <a class="btn btn-primary" href=" {{ event.event_link }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
-                  </div>
                 </div>
-              </div>
+
             </div>
-          </div>
+
+
         </div>
-      {% endfor %}
-    </section>
-  {% endif %}
 
-{% endblock %}
 
-{% block script %}
-    <script>
-    // Ensures the DOM is fully loaded before attaching the click event
-    $(function(){
-      $('div.card').each(function(index, element) {
-        //gets all classes of element as a list
-        let classes = $(element).attr('class').split(' ');
-        console.log(classes[2])
-        // event_id is the third class
-        $(element).click(function() {
-          // Redirect to a new page
-          window.location.href = `/ticketmaster/event/view/${classes[2]}`;
-        });
-      })
-    });
-  </script>
+    </div>
+                        {% endfor %}
+                    </section>
+                {% endif %}
+
+
+
+
+
+
+
 {% endblock %}

@@ -303,7 +303,6 @@ def get_comment_array(event_id):
 
 def is_saved(event_id, user):
     try:
-        print(SavedEvent.objects.get(eventID__event_id=event_id, user=user))
         return SavedEvent.objects.get(eventID__event_id=event_id, user=user)
     except SavedEvent.DoesNotExist:
         # when event has no comments
