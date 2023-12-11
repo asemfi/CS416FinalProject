@@ -120,7 +120,7 @@ def ticketmaster(request):
                     encoded_address = urllib.parse.quote(address_for_google_maps)
 
                     google_map = "https://www.google.com/maps/search/?api=1&query=" + encoded_address
-                    print(google_map)
+
 
                     # Create a new dictionary to store event details
                     event_details = {
@@ -208,6 +208,7 @@ def view_event(request, event_id):
         'localTime': event.localTime.strftime("%I:%M %p"),
         'address': event.address,
         'cityState': event.cityState,
+        'googleMap': event.googleMap,
         'comments': comment_list,
         'commentExists': already_commented,
         'commentInfo': {
