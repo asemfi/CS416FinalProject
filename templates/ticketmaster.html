@@ -75,6 +75,15 @@
                     <div>
                       <div class="col-4-sm">
                         <a class="btn btn-primary" href=" {{ event.eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
+                        {% if user.is_authenticated %}
+                        <a class="btn btn-outline-danger" href="#" data-event-id="{{ event.event_id }}" id="favorite-button" role="button">
+                          {% if event.favoriteEvent %}
+                            <i class="bi bi-heart-fill"></i>
+                          {% else %}
+                            <i class="bi bi-heart"></i>
+                          {% endif %}
+                        </a>
+                      {% endif %}
                       </div>
                     </div>
                   </div>
@@ -101,6 +110,24 @@
           if (!$(event.target).is('button, a, i')) {
             // Redirect to a new page
             window.location.href = `/ticketmaster/event/view/${classes[2]}`;
+          }
+        });
+      });
+
+      $('#favorite-button').on('click', function(e) {
+        e.preventDefault();
+        let event_id = $(this).data('event-id');
+        console.log('event_id: ' + event_id)
+        // Make an asynchronous request to toggle_save view, should refresh and resubmit page
+        $.ajax({
+          url: "{% url 'toggle_save' event_id='PLACEHOLDER' source='ticketmaster' %}".replace('PLACEHOLDER', event_id),
+          method: 'GET',
+          success: function(data) {
+            // On success, refresh the page
+            location.reload();
+          },
+          error: function(error) {
+            console.error('Error:', error);
           }
         });
       });
