@@ -20,9 +20,4 @@ urlpatterns = [
 
     # crud update
     path('update', views.update_view, name="update")
-
-
-
-
-
 ]
