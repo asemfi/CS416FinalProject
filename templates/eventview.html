@@ -43,9 +43,9 @@
                     {% if user.is_authenticated %}
                       <a class="btn btn-outline-danger" href="{% url 'toggle_save' event_id %}"  id="favorite-button" role="button">
                         {% if commentInfo.favoriteEvent %}
-                          <i class="bi bi-heart"></i>
-                        {% else %}
                           <i class="bi bi-heart-fill"></i>
+                        {% else %}
+                          <i class="bi bi-heart"></i>
                         {% endif %}
                       </a>
                     {% endif %}
