@@ -49,10 +49,10 @@
       {% for event in events %}
         <div class="card mb-3 {{ event.event_id }}">
           <div class="row g-0 align-items-center">
-            <div class="col-sm-4">
+            <div class="col-lg-4">
               <img src="{{ event.imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
             </div>
-            <div class="col-sm-8">
+            <div class="col-lg-8">
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-8">
@@ -76,7 +76,7 @@
                       <div class="col-4-sm">
                         <a class="btn btn-primary" href=" {{ event.eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
                         {% if user.is_authenticated %}
-                        <a class="btn btn-outline-danger" href="#" data-event-id="{{ event.event_id }}" id="favorite-button" role="button">
+                        <a class="btn btn-outline-danger favorite-button" href="#" data-event-id="{{ event.event_id }}" role="button">
                           {% if event.favoriteEvent %}
                             <i class="bi bi-heart-fill"></i>
                           {% else %}
@@ -114,7 +114,7 @@
         });
       });
 
-      $('#favorite-button').on('click', function(e) {
+      $('.favorite-button').on('click', function(e) {
         e.preventDefault();
         let event_id = $(this).data('event-id');
         console.log('event_id: ' + event_id)

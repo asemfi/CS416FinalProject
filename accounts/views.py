@@ -6,12 +6,16 @@ from django.views.generic import FormView
 from django.contrib import messages
 from accounts.forms import SignUpForm, EditUserForm
 from django.contrib.auth.models import User
+from ticketMaster.views import is_saved
+from ticketMaster.models import Event, Comment, SavedEvent
+
 
 # Rana Naimat
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
-    return render(request, 'accounts/index.html')
+    context = {'savedEvents': get_saved_events(request.user)}  # savedEvents is an array of dictionaries}
+    return render(request, 'accounts/index.html', context)
 
 
 def update_view(request):
@@ -61,8 +65,37 @@ def login_view(request):
     else:
         form = AuthenticationForm()
 
-    context = {'form': form}
+    context = {
+        'form': form
+    }
+
     return render(request, 'accounts/login.html', context)
+
+
+def get_saved_events(current_user):
+    saved_events = SavedEvent.objects.filter(user=current_user)
+
+    return_events = []
+
+    for saved_event in saved_events:
+        # get event, log details
+        event = saved_event.eventID
+        event_details = {
+            'event_id': event.event_id,
+            'eventName': event.eventName,
+            'eventLink': event.eventLink,
+            'imageLink': event.imageLink,
+            'venue': event.venue,
+            'localDate': event.localDate,
+            'localTime': event.localTime,
+            'address': event.address,
+            'cityState': event.cityState,
+            'googleMap': event.googleMap,
+        }
+
+        return_events.append(event_details)
+
+    return return_events
 
 
 def logout_view(request):

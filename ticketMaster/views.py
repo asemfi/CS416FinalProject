@@ -134,7 +134,6 @@ def ticketmaster(request):
                         'address': event_address,
                         'cityState': event_city_state,
                         'googleMap': google_map
-
                     }
 
                     # check if event is in event table
@@ -353,5 +352,7 @@ def toggle_save(request, event_id, source):
         return redirect(reverse('view_event', kwargs={'event_id': event_id}))
     elif source == 'ticketmaster':
         return JsonResponse({'status': 'success'})
+    elif source == 'index':
+        return redirect(reverse('index'))
     else:
         raise Http404("Invalid source parameter")
