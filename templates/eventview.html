@@ -15,10 +15,10 @@
   <section class="shadow p-5" id="results">
     <div class="card mb-3 {{ event_id }}">
       <div class="row g-0 align-items-center">
-        <div class="col-sm-4">
+        <div class="col-lg-4">
           <img src="{{ imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
         </div>
-        <div class="col-sm-8">
+        <div class="col-lg-8">
           <div class="card-body">
             <div class="row">
               <div class="col-sm-8">
@@ -35,17 +35,17 @@
                 </small>
               </div>
               <p class="card-text text-muted display-6" id="venue-name"> {{ venue }}</p>
-              <p class="card-text text-muted " id="address"> {{ address }}<br> {{ cityState }}</p>
+              <p class="card-text text-muted " id="address"> {{ address }}<br> {{ cityState }}<a href="{{ event.googleMap }}" target="_blank"><i class="bi bi-compass"></i></a></p>
               <div>
                 <div>
                   <div class="col-4-sm">
                     <a class="btn btn-primary" href=" {{ eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
                     {% if user.is_authenticated %}
-                      <a class="btn btn-outline-danger" href="{% url 'toggle_save' event_id %}"  id="favorite-button" role="button">
+                      <a class="btn btn-outline-danger" href="{% url 'toggle_save' event_id 'view_event'%}"  id="favorite-button" role="button">
                         {% if commentInfo.favoriteEvent %}
-                          <i class="bi bi-heart"></i>
-                        {% else %}
                           <i class="bi bi-heart-fill"></i>
+                        {% else %}
+                          <i class="bi bi-heart"></i>
                         {% endif %}
                       </a>
                     {% endif %}

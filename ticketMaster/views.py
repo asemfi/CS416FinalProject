@@ -5,8 +5,8 @@ import requests
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from django.http import JsonResponse
-from django.urls import reverse
+from django.http import JsonResponse, Http404
+from django.urls import reverse, NoReverseMatch
 from django.utils import timezone
 
 from .models import Event, Comment, SavedEvent
@@ -61,6 +61,9 @@ def ticketmaster(request):
 
                 # Initialize an empty list to store user data
                 event_list = []
+
+                # check current user
+                current_user = request.user
 
                 # Iterate through each user in the 'events' list coming from the api
                 # Rather than directly passing the "events" array to the template,
@@ -117,7 +120,7 @@ def ticketmaster(request):
                     encoded_address = urllib.parse.quote(address_for_google_maps)
 
                     google_map = "https://www.google.com/maps/search/?api=1&query=" + encoded_address
-                    print(google_map)
+
 
                     # Create a new dictionary to store event details
                     event_details = {
@@ -130,8 +133,7 @@ def ticketmaster(request):
                         'localTime': formatted_time,
                         'address': event_address,
                         'cityState': event_city_state,
-                        'google_map': google_map
-
+                        'googleMap': google_map
                     }
 
                     # check if event is in event table
@@ -144,6 +146,17 @@ def ticketmaster(request):
 
                     event_details['localDate'] = formatted_date
                     event_details['localTime'] = formatted_time
+
+                    if current_user.is_authenticated:
+                        saved = is_saved(event_id, current_user)
+                        print('user authenticated')
+                    else:
+                        saved = None
+                        print('not authenticated')
+
+                    event_details['favoriteEvent'] = saved
+                    print('favorite event? ')
+                    print(saved)
                     event_list.append(event_details)
 
                 print('printing event_list')
@@ -195,6 +208,7 @@ def view_event(request, event_id):
         'localTime': event.localTime.strftime("%I:%M %p"),
         'address': event.address,
         'cityState': event.cityState,
+        'googleMap': event.googleMap,
         'comments': comment_list,
         'commentExists': already_commented,
         'commentInfo': {
@@ -323,16 +337,23 @@ def update_comment_content(event_id, user, rating, comment):
         return None
 
 
-def toggle_save(request, event_id):
+def toggle_save(request, event_id, source):
     e_id = Event.objects.get(event_id=event_id).id
     user = request.user.id
     saved = is_saved(event_id, user)
+
     if saved:
         saved.delete()
-        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
     else:
         new_save = SavedEvent(eventID_id=e_id, user_id=user)
         new_save.full_clean()
         new_save.save()
-        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
 
+    if source == 'view_event':
+        return redirect(reverse('view_event', kwargs={'event_id': event_id}))
+    elif source == 'ticketmaster':
+        return JsonResponse({'status': 'success'})
+    elif source == 'index':
+        return redirect(reverse('index'))
+    else:
+        raise Http404("Invalid source parameter")

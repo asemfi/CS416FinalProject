@@ -16,9 +16,9 @@
                     {% if user.is_authenticated %}
 
                         {% if user.first_name == '' %}
-                            <h3 class="display-2 text-success">Welcome !! {{ user.username }}</h3>
+                            <h3 class="display-2 text-primary">Welcome !! {{ user.username }}</h3>
                         {% else %}
-                            <h3 class="display-2 text-success"> Welcome
+                            <h3 class="display-2 text-primary"> Welcome
                                 !! {{ user.first_name }} {{ user.last_name }}</h3>
                         {% endif %}
                     {% endif %}
@@ -45,16 +45,80 @@
                          class="img-fluid" alt=""/>
                 </div>
             </div>
+          {% if savedEvents %}
+{#            <section class="shadow p-5" id="results">#}
+            <div class="fw-semibold h1 text-center p-4" id="saved-header">Saved Events</div>
+              {% for event in savedEvents %}
+                <div class="card mb-3 {{ event.event_id }}">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-lg-4">
+                      <img src="{{ event.imageLink}}" alt="event_img" class="card-img rounded p-1 img-fluid" id="event-img">
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-sm-8">
+                            <h3 class="card-title display-4" id="event-title">
+                              {{ event.eventName }}
+                            </h3>
+                          </div>
+                          <div class="col-sm-4">
+                            <small class="fs-4 text-success fw-bold" id="date">
+                              {{ event.localDate }}
+                            </small><br>
+                            <small class="fw-light fs-6 text-success" id="time">
+                              {{ event.localTime }}
+                            </small>
+                          </div>
 
-            <div class="container p-5 shadow my-5 bg-white rounded">
-
-                <h1>Fav events</h1>
-
-            </div>
-
+                          <p class="card-text text-muted display-6" id="venue-name"> {{ event.venue }}</p>
+                          <p class="card-text text-muted " id="address"> {{ event.address }}<br> {{ event.cityState }}<a href="{{ event.googleMap }}" target="_blank"><i class="bi bi-compass"></i></a></p>
+                          <div>
+                            <div>
+                              <div class="col-4-sm">
+                                <a class="btn btn-primary" href=" {{ event.eventLink }}"  id="event-url" role="button" target="_blank">Find Tickets</a>
+                                <a class="btn btn-outline-danger" href="{% url 'toggle_save' event.event_id 'index' %}" id="favorite-button" role="button">
+                                  {# all events are favorites, don't need to bother with empty heart #}
+                                  <i class="bi bi-heart-fill"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+{# user has no saved events#}
+            <div class="fw-light h2 text-center pt-5">You haven't saved any events yet.</div>
+          {% endif %}
 
         </div>
 
 
     </section>
+{% endblock %}
+
+{% block script %}
+    <script>
+    // Ensures the DOM is fully loaded before attaching the click event
+    $(function(){
+      console.log('loaded')
+      $('div.card').each(function(index, element) {
+        //gets all classes of element as a list
+        let classes = $(element).attr('class').split(' ');
+        console.log(classes[2])
+        // event_id is the third class
+        $(element).click(function(event) {
+          console.log('clicked!')
+          if (!$(event.target).is('button, a, i')) {
+            // Redirect to a new page
+            window.location.href = `/ticketmaster/event/view/${classes[2]}`;
+          }
+        });
+      });
+    });
+  </script>
 {% endblock %}
