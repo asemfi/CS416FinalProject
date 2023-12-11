@@ -130,7 +130,7 @@ def ticketmaster(request):
                         'localTime': formatted_time,
                         'address': event_address,
                         'cityState': event_city_state,
-                        'google_map': google_map
+                        'googleMap': google_map
 
                     }
 
