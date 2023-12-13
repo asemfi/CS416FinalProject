@@ -6,7 +6,7 @@
 
 {% block search %}
     <div class="row mb-5 pb-2">
-      <div class="col-10 text-center mx-auto mb-2">
+      <div class="col-10 text-center mx-auto ">
         <form action="{% url 'ticketmaster' %}" method="post">
           {% csrf_token %}
           <div class="input-group">
